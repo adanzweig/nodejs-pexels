@@ -6,12 +6,13 @@ require('dotenv').config();
  *
  * @param {string} topic - The search topic for the video.
  * @param {string} apiKey - The API key used to authenticate the request.
+ * @param {string} minTime - The minimal amount of time for a video
  * @returns {string|null} - The link of the HD video or null if not found.
  */
-async function getVideo(topic, apiKey) {
+async function getVideo(topic, apiKey,minTime) {
     try {
         // Make an API request to the Pexels video search endpoint.
-        const request = await fetch(`https://api.pexels.com/v1/videos/search?query=${topic}&per_page=1`, {
+        const request = await fetch(`https://api.pexels.com/v1/videos/search?query=${topic}&per_page=80`, {
             headers: {
                 Authorization: apiKey
             }
@@ -22,7 +23,7 @@ async function getVideo(topic, apiKey) {
 
         // Find and return the HD quality video link from the video files array.
         // If HD quality video is not found, it will return undefined.
-        return response.videos[0].video_files.find(v => v.quality == 'hd')?.link;
+        return response.videos.find(v=>v.duration > minTime).video_files.find(v => v.quality == 'hd')?.link;
 
     } catch (error) {
         // Log any errors that occur during the API request or processing.
