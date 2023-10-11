@@ -1,6 +1,6 @@
 {
   "name": "adanjz-pexels",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,5 +11,13 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.3.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adanzweig/nodejs-pexels.git"
+  },
+  "bugs":{
+    "url":"https://github.com/adanzweig/nodejs-pexels/issues"
+  },
+  "homepage": "https://github.com/adanzweig/nodejs-pexels"
 }

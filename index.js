@@ -40,3 +40,6 @@ async function getVideo(topic, apiKey) {
     console.log(video);
 })();
 */
+module.exports = {
+    getVideo
+}
