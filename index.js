@@ -1,5 +1,8 @@
 // Load environment variables from the `.env` file.
 require('dotenv').config();
+// const axios = require('axios');
+const fs = require('fs');
+const https = require('https');
 
 /**
  * Fetch a video link based on the provided topic using the Pexels API.
@@ -12,7 +15,7 @@ require('dotenv').config();
 async function getVideo(topic, apiKey,minTime) {
     try {
         // Make an API request to the Pexels video search endpoint.
-        const request = await fetch(`https://api.pexels.com/v1/videos/search?query=${topic}&per_page=80`, {
+        const request = await fetch(`https://api.pexels.com/v1/videos/search?query=${topic}&per_page=80&orientation=portrait`, {
             headers: {
                 Authorization: apiKey
             }
@@ -23,6 +26,7 @@ async function getVideo(topic, apiKey,minTime) {
 
         // Find and return the HD quality video link from the video files array.
         // If HD quality video is not found, it will return undefined.
+        // console.log(response.videos.find(v=>v.duration > minTime).video_files);
         return response.videos.find(v=>v.duration > minTime).video_files.find(v => v.quality == 'hd')?.link;
 
     } catch (error) {
@@ -31,6 +35,26 @@ async function getVideo(topic, apiKey,minTime) {
     }
 }
 
+async function downloadFile(url) {
+    
+    return new Promise((resolve,reject)=>{
+        const options = {
+            rejectUnauthorized: false, // Bypass SSL certificate validation (use with caution)
+          };
+          const fileStream = fs.createWriteStream('video.mp4');
+          https.get(url, (response) => {
+            response.pipe(fileStream);
+      
+            response.on('end', () => {
+              console.log('Video downloaded successfully');
+            });
+          }).on('error', (downloadError) => {
+            console.error('Error downloading video:', downloadError);
+          });
+    })
+    
+  }
+  
 // Uncomment the following lines to test the `getVideo` function.
 /*
 (async () => {
@@ -42,5 +66,6 @@ async function getVideo(topic, apiKey,minTime) {
 })();
 */
 module.exports = {
-    getVideo
+    getVideo,
+    downloadFile
 }
